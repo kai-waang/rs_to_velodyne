@@ -27,14 +27,14 @@ static int RING_ID_MAP_16[] = {
 // rslidar的点云格式
 struct RsPointXYZIRT {
     PCL_ADD_POINT4D;
-    uint8_t intensity;
+    PCL_ADD_INTENSITY;
     uint16_t ring = 0;
     double timestamp = 0;
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 } EIGEN_ALIGN16;
 POINT_CLOUD_REGISTER_POINT_STRUCT(RsPointXYZIRT,
-                                  (float, x, x)(float, y, y)(float, z, z)(uint8_t, intensity, intensity)
+                                  (float, x, x)(float, y, y)(float, z, z)(float, intensity, intensity)
                                           (uint16_t, ring, ring)(double, timestamp, timestamp))
 
 // velodyne的点云格式
@@ -93,7 +93,7 @@ void publish_points(T &new_pc, const sensor_msgs::PointCloud2 &old_msg) {
     sensor_msgs::PointCloud2 pc_new_msg;
     pcl::toROSMsg(*new_pc, pc_new_msg);
     pc_new_msg.header = old_msg.header;
-    pc_new_msg.header.frame_id = "velodyne";
+    pc_new_msg.header.frame_id = "lidar_link";
     pubRobosensePC.publish(pc_new_msg);
 }
 
